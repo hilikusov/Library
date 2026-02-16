@@ -17,7 +17,7 @@ jobs:
     steps:
       # 1. Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # 2. Set up Node.js and cache npm
       - name: Set up Node.js
@@ -62,15 +62,15 @@ jobs:
           echo "Waiting for server..."
           npx wait-on http://localhost:3000
 
-      # 7. Run Playwright tests
+      # 7. Run Playwright tests (allow failure so artifacts upload)
       - name: Run Playwright tests
         run: npm test
         continue-on-error: true
 
-      # 8. Upload Playwright artifacts (screenshots/videos) on failure
+      # 8. Upload Playwright artifacts on failure
       - name: Upload Playwright artifacts
         if: failure()
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-artifacts
           path: |
