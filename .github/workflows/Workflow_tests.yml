@@ -30,9 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 4. Install Playwright browsers and all required dependencies automatically
-      - name: Install Playwright browsers + OS deps
-        run: npx playwright install --with-deps
+      # 4. Install Playwright browsers (skip --with-deps)
+      - name: Install Playwright browsers
+        run: npx playwright install
 
       # 5. Start server in background
       - name: Start server
@@ -41,7 +41,7 @@ jobs:
           echo "Waiting for server..."
           npx wait-on http://localhost:3000
 
-      # 6. Run Playwright tests (allow failure so artifacts can be uploaded)
+      # 6. Run Playwright tests
       - name: Run Playwright tests
         run: npm test
         continue-on-error: true
