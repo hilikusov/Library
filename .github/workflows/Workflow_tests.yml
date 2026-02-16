@@ -28,5 +28,11 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install
 
-      - name: Run tests
+      - name: Start server
+        run: npm start &
+      
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000
+
+      - name: Run Playwright tests
         run: npm test
