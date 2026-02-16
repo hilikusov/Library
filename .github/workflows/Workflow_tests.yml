@@ -30,44 +30,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 4. Install system dependencies for Playwright
-      - name: Install system dependencies for Playwright
-        run: sudo apt-get update && sudo apt-get install -y \
-          libnss3 \
-          libatk1.0-0 \
-          libatk-bridge2.0-0 \
-          libcups2 \
-          libxkbcommon0 \
-          libxcomposite1 \
-          libxdamage1 \
-          libxrandr2 \
-          libgbm1 \
-          libpango-1.0-0 \
-          libgtk-3-0 \
-          libasound2t64 \
-          libffi8 \
-          libx264-165 \
-          wget \
-          curl \
-          ca-certificates
+      # 4. Install Playwright browsers + dependencies automatically
+      - name: Install Playwright browsers and dependencies
+        run: npx playwright install --with-deps
 
-      # 5. Install Playwright browsers
-      - name: Install Playwright browsers
-        run: npx playwright install
-
-      # 6. Start server in background
+      # 5. Start server in background
       - name: Start server
         run: |
           npm start &
           echo "Waiting for server..."
           npx wait-on http://localhost:3000
 
-      # 7. Run Playwright tests (allow failure so artifacts upload)
+      # 6. Run Playwright tests
       - name: Run Playwright tests
         run: npm test
         continue-on-error: true
 
-      # 8. Upload Playwright artifacts on failure
+      # 7. Upload Playwright artifacts on failure
       - name: Upload Playwright artifacts
         if: failure()
         uses: actions/upload-artifact@v4
