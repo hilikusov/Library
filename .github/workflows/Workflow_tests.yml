@@ -19,19 +19,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Set up Node.js and cache npm
+      # 2. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
 
-      # 3. Install dependencies
+      # 3. Install project dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4. Install Playwright browsers + dependencies automatically
-      - name: Install Playwright browsers and dependencies
+      # 4. Install Playwright browsers and all required dependencies automatically
+      - name: Install Playwright browsers + OS deps
         run: npx playwright install --with-deps
 
       # 5. Start server in background
@@ -41,12 +41,12 @@ jobs:
           echo "Waiting for server..."
           npx wait-on http://localhost:3000
 
-      # 6. Run Playwright tests
+      # 6. Run Playwright tests (allow failure so artifacts can be uploaded)
       - name: Run Playwright tests
         run: npm test
         continue-on-error: true
 
-      # 7. Upload Playwright artifacts on failure
+      # 7. Upload artifacts on failure
       - name: Upload Playwright artifacts
         if: failure()
         uses: actions/upload-artifact@v4
